@@ -3,10 +3,19 @@
 
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 :root {
-    --primary: #fe2c55
+    --primary: #fe2c55;
+    --text-color: #333;
+
+
+    // Default layout
+    --default-layout-header-height: 60px;   
+    --default-layout-width: 1130px;
+
 }
 html{
     font-size: 62.5%;
@@ -19,4 +28,14 @@ body {
     line-height: 1.5;
     text-rendering: optimizeSpeed;
     font-size: 1.6rem;
+}
+
+button, input, [tabindex]{
+    outline: none;
+    border: none;
+
+}
+a[href]{
+    color: var(--text-color);
+    text-decoration: none;
 }

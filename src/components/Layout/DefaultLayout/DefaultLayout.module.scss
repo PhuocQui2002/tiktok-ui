@@ -1,0 +1,17 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container{
+    display: flex;
+    width: var(--default-layout-width);
+    min-height: 1000px;
+    // background-color: aquamarine;
+}
+.content{
+    flex: 1;
+    min-height: 1000px;
+    // background-color: yellowgreen;
+}
