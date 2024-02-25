@@ -5,16 +5,31 @@ import {
   faCircleXmark,
   faSpinner,
   faMagnifyingGlass,
+
+  faSignIn,
 } from "@fortawesome/free-solid-svg-icons";
+import Tippy from "@tippyjs/react/headless";
+import "tippy.js/dist/tippy.css"; // optional
+import { useEffect, useState } from "react";
+import { Wrapper as PopperWrapper } from "~/components/Popper";
+import AccountItem from "../../../AccountItem";
+import Button from "~/components/Button";
 
 const cx = classNames.bind(styles);
 
 function Header() {
+  const [searchResult, setSearchResult] = useState([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSearchResult([1, 2]);
+    }, 0);
+  });
   return (
     <header className={cx("wrapper")}>
       <div className={cx("inner")}>
-        <div className={cx("logo")} >
-          <svg >
+        <div className={cx("logo")}>
+          <svg>
             <path
               fill="#25F4EE"
               d="M9.875 16.842v-1.119A9 9 0 0 0 8.7 15.64c-4.797-.006-8.7 3.9-8.7 8.708a8.7 8.7 0 0 0 3.718 7.134A8.68 8.68 0 0 1 1.38 25.55c0-4.737 3.794-8.598 8.495-8.707"
@@ -49,18 +64,45 @@ function Header() {
             ></path>
           </svg>
         </div>
-        <div className={cx("search")}>
-          <input placeholder="search account and video" spellCheck={false} />
-          <button className={cx("clear")}>
-            <FontAwesomeIcon icon={faCircleXmark} />
-          </button>
-          <FontAwesomeIcon className={cx("loading")} icon={faSpinner} />
-          <button className={cx("search-btn")}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </button>
-        </div>
+        <Tippy
+          interactive={true}
+          visible={searchResult.length > 0}
+          render={(attrs) => (
+            <div className={cx("search-result")} tabIndex="-1" {...attrs}>
+              <PopperWrapper>
+                <h4 className={cx("search-title")}> Accounts </h4>
+                <AccountItem />
+                <AccountItem />
+                <AccountItem />
+              </PopperWrapper>
+            </div>
+          )}
+        >
+          <div className={cx("search")}>
+            <input placeholder="search account and video" spellCheck={false} />
+            <button className={cx("clear")}>
+              <FontAwesomeIcon icon={faCircleXmark} />
+            </button>
+            <FontAwesomeIcon className={cx("loading")} icon={faSpinner} />
+
+            <button className={cx("search-btn")}>
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </button>
+          </div>
+        </Tippy>
         <div className={cx("actions")}>
-              <h3>Action</h3>
+          <Button test onClick={() => alert("test")}>
+            Register
+          </Button>
+          <Button
+            //rounded
+            primary
+            // className={cx("custome-login")}
+            onClick={() => alert("test")}
+            letfIcon ={<FontAwesomeIcon icon={faSignIn} />}
+          >
+            Loin
+          </Button>
         </div>
       </div>
     </header>
