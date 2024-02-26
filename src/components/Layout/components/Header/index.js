@@ -5,8 +5,11 @@ import {
   faCircleXmark,
   faSpinner,
   faMagnifyingGlass,
-
   faSignIn,
+  faEllipsisVertical,
+  faEarthAsia,
+  faKeyboard,
+  faCircleQuestion,
 } from "@fortawesome/free-solid-svg-icons";
 import Tippy from "@tippyjs/react/headless";
 import "tippy.js/dist/tippy.css"; // optional
@@ -14,17 +17,52 @@ import { useEffect, useState } from "react";
 import { Wrapper as PopperWrapper } from "~/components/Popper";
 import AccountItem from "../../../AccountItem";
 import Button from "~/components/Button";
+import Menu from "~/components/Popper/Menu";
 
 const cx = classNames.bind(styles);
+const MENU_ICON = [
+  {
+    icon: <FontAwesomeIcon icon={faEarthAsia} />,
+    title: "English",
+    children: {
+      title: "Language",
+      data: [
+        {
+          code: "en",
+          title: "English",
+        },
+        {
+          code: "vn",
+          title: "Vietnamese",
+        },
+      ],
+    },
+  },
+  {
+    icon: <FontAwesomeIcon icon={faCircleQuestion} />,
+    title: "Feedback and help",
+    to: "/feedback",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faKeyboard} />,
+    title: "Keyboard shortcuts",
+  },
+];
 
 function Header() {
   const [searchResult, setSearchResult] = useState([]);
 
   useEffect(() => {
     setTimeout(() => {
-      setSearchResult([1, 2]);
+      setSearchResult([1, 2, 3]);
     }, 0);
-  });
+  }, []);
+
+  const handleMenuChange = (MenuItem) => {
+    console.log(MenuItem);
+  };
+
+  const currentUres = "True";
   return (
     <header className={cx("wrapper")}>
       <div className={cx("inner")}>
@@ -64,8 +102,9 @@ function Header() {
             ></path>
           </svg>
         </div>
+
         <Tippy
-          interactive={true}
+          interactive
           visible={searchResult.length > 0}
           render={(attrs) => (
             <div className={cx("search-result")} tabIndex="-1" {...attrs}>
@@ -90,20 +129,31 @@ function Header() {
             </button>
           </div>
         </Tippy>
-        <div className={cx("actions")}>
-          <Button test onClick={() => alert("test")}>
-            Register
-          </Button>
-          <Button
-            //rounded
-            primary
-            // className={cx("custome-login")}
-            onClick={() => alert("test")}
-            letfIcon ={<FontAwesomeIcon icon={faSignIn} />}
-          >
-            Loin
-          </Button>
-        </div>
+
+        {currentUres ? (
+          <div className={cx("current-ures")}></div>
+        ) : (
+          <div className={cx("actions")}>
+            <Button test onClick={() => alert("test")}>
+              Register
+            </Button>
+            <Button
+              //rounded
+              primary
+              // className={cx("custome-login")}
+              onClick={() => alert("test")}
+              letfIcon={<FontAwesomeIcon icon={faSignIn} />}
+            >
+              Log in
+            </Button>
+
+            <Menu items={MENU_ICON} onChange={handleMenuChange}>
+              <button className={cx("more-btn")}>
+                <FontAwesomeIcon icon={faEllipsisVertical} />
+              </button>
+            </Menu>
+          </div>
+        )}
       </div>
     </header>
   );

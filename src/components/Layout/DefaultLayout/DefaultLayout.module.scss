@@ -7,7 +7,7 @@
 .container{
     display: flex;
     width: var(--default-layout-width);
-    min-height: 1000px;
+    padding: var(--default-layout-horizontal-spacer);
     // background-color: aquamarine;
 }
 .content{

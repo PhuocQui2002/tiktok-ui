@@ -13,11 +13,12 @@
 
 .inner{
     width: var(--default-layout-width);
+    height: 100%;
+    padding: var(--default-layout-horizontal-spacer);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 100%;
-    
+   
     
     // background-color: #ccc;
 }
@@ -103,3 +104,10 @@
 .custome-login{
     color: red;
 }
+.more-btn{
+    font-size: 2rem;
+    margin-left: 28px;
+    background-color: transparent;
+    cursor: pointer;
+}
+
