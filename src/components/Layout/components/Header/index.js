@@ -2,25 +2,30 @@ import styles from "./Header.modules.scss";
 import classNames from "classnames/bind";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCircleXmark,
-  faSpinner,
-  faMagnifyingGlass,
   faSignIn,
   faEllipsisVertical,
   faEarthAsia,
   faKeyboard,
   faCircleQuestion,
+  faUser,
+  faCoins,
+  faSignOut,
+  faGear,
 } from "@fortawesome/free-solid-svg-icons";
-import Tippy from "@tippyjs/react/headless";
+import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css"; // optional
-import { useEffect, useState } from "react";
-import { Wrapper as PopperWrapper } from "~/components/Popper";
-import AccountItem from "../../../AccountItem";
+
+
 import Button from "~/components/Button";
 import Menu from "~/components/Popper/Menu";
+import { UploadIcon } from "~/components/Icons";
+import { InboxIcon } from "~/components/Icons/inbox";
+import { MessagesIcon } from "~/components/Icons/messages";
+import Image from "~/components/Image";
+import Search from "../Search";
 
 const cx = classNames.bind(styles);
-const MENU_ICON = [
+const MENU_ITEMS = [
   {
     icon: <FontAwesomeIcon icon={faEarthAsia} />,
     title: "English",
@@ -50,19 +55,38 @@ const MENU_ICON = [
 ];
 
 function Header() {
-  const [searchResult, setSearchResult] = useState([]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setSearchResult([1, 2, 3]);
-    }, 0);
-  }, []);
+  
 
   const handleMenuChange = (MenuItem) => {
     console.log(MenuItem);
   };
 
-  const currentUres = "True";
+  const currentUres = true;
+  const userMenu = [
+    {
+      icon: <FontAwesomeIcon icon={faUser} />,
+      title: "View profile",
+      to: "/meow",
+    },
+    {
+      icon: <FontAwesomeIcon icon={faCoins} />,
+      title: "Get coins",
+      to: "/coin",
+    },
+    {
+      icon: <FontAwesomeIcon icon={faGear} />,
+      title: "Setting",
+      to: "/setting",
+    },
+    ...MENU_ITEMS,
+    {
+      icon: <FontAwesomeIcon icon={faSignOut} />,
+      title: "Log out",
+      to: "/logout",
+      separate: true,
+    },
+  ];
+
   return (
     <header className={cx("wrapper")}>
       <div className={cx("inner")}>
@@ -102,58 +126,62 @@ function Header() {
             ></path>
           </svg>
         </div>
+    {/* // Search */}
+        <Search/>
+        <div className={cx("actions")}>
+          {currentUres ? (
+            <>
+              <Tippy delay={[0, 200]} content="Upload video" placement="bottom">
+                <button className={cx("action-btn")}>
+                  <UploadIcon />
+                </button>
+              </Tippy>
 
-        <Tippy
-          interactive
-          visible={searchResult.length > 0}
-          render={(attrs) => (
-            <div className={cx("search-result")} tabIndex="-1" {...attrs}>
-              <PopperWrapper>
-                <h4 className={cx("search-title")}> Accounts </h4>
-                <AccountItem />
-                <AccountItem />
-                <AccountItem />
-              </PopperWrapper>
-            </div>
+              <Tippy delay={[0, 200]} content="Messages" placement="bottom">
+                <button className={cx("action-btn")}>
+                  <MessagesIcon />
+                </button>
+              </Tippy>
+              <Tippy delay={[0, 200]} content="Inbox" placement="bottom">
+                <button className={cx("action-btn")}>
+                  <InboxIcon />
+                </button>
+              </Tippy>
+            </>
+          ) : (
+            <>
+              <Button test onClick={() => alert("test")}>
+                Register
+              </Button>
+              <Button
+                //rounded
+                primary
+                // className={cx("custome-login")}
+                onClick={() => alert("test")}
+                letfIcon={<FontAwesomeIcon icon={faSignIn} />}
+              >
+                Log in
+              </Button>
+            </>
           )}
-        >
-          <div className={cx("search")}>
-            <input placeholder="search account and video" spellCheck={false} />
-            <button className={cx("clear")}>
-              <FontAwesomeIcon icon={faCircleXmark} />
-            </button>
-            <FontAwesomeIcon className={cx("loading")} icon={faSpinner} />
-
-            <button className={cx("search-btn")}>
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </button>
-          </div>
-        </Tippy>
-
-        {currentUres ? (
-          <div className={cx("current-ures")}></div>
-        ) : (
-          <div className={cx("actions")}>
-            <Button test onClick={() => alert("test")}>
-              Register
-            </Button>
-            <Button
-              //rounded
-              primary
-              // className={cx("custome-login")}
-              onClick={() => alert("test")}
-              letfIcon={<FontAwesomeIcon icon={faSignIn} />}
-            >
-              Log in
-            </Button>
-
-            <Menu items={MENU_ICON} onChange={handleMenuChange}>
+          <Menu
+            items={currentUres ? userMenu : MENU_ITEMS}
+            onChange={handleMenuChange}
+          >
+            {currentUres ? (
+              <Image
+                className={cx("urer-avarta")}
+                src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/c4dff5ee012c36229b569baed4f79979~c5_100x100.jpeg?lk3s=a5d48078&x-expires=1709107200&x-signature=XYBJhjmr0aTmoSGW4L8%2FivcRa3E%3D"
+                alt="Nguyen Ngoc Diep"
+                fallback="https://p9-sign-sg.tiktokcdn.com/aweme/100x100/tos-alisg-avt-0068/b17fc01828d76e61700c08a8fc1fca34.jpeg?lk3s=a5d48078&x-expires=1709197200&x-signature=oSwT5pFcsnjiGIaS9k154qJcXPQ%3D"
+              />
+            ) : (
               <button className={cx("more-btn")}>
                 <FontAwesomeIcon icon={faEllipsisVertical} />
               </button>
-            </Menu>
-          </div>
-        )}
+            )}
+          </Menu>
+        </div>
       </div>
     </header>
   );
