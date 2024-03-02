@@ -9,10 +9,13 @@ import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
-const defaultFn = ()=>{
-
-}
-function Menu({ children, items = [], onChange =defaultFn}) {
+const defaultFn = () => {};
+function Menu({
+  children,
+  items = [],
+  hideOnClick = false,
+  onChange = defaultFn,
+}) {
   const [history, setHistory] = useState([{ data: items }]);
   const current = history[history.length - 1];
 
@@ -27,7 +30,7 @@ function Menu({ children, items = [], onChange =defaultFn}) {
           onClick={() => {
             if (isParent) {
               setHistory((prev) => [...prev, item.children]);
-            } else{
+            } else {
               onChange(item);
             }
           }}
@@ -35,29 +38,35 @@ function Menu({ children, items = [], onChange =defaultFn}) {
       );
     });
   };
-  
+
+  const renderResult = (attrss) => (
+    <div className={cx("menu-lish")} tabIndex="-1" {...attrss}>
+      <PopperWrapper className={cx("menu-poper")}>
+        {history.length > 1 && (
+          <Header
+            title={current.title}
+            onBack={() => {
+              setHistory((prev) => prev.slice(0, prev.length - 1));
+            }}
+          />
+        )}
+        <div className={cx("menu-body")}>{renderItems()}</div>
+      </PopperWrapper>
+    </div>
+  );
+  const handleResetToFristPage = () => {
+    setHistory((prev) => prev.slice(0, 1));
+  };
+
   return (
     <Tippy
       delay={[0, 700]}
-      offset={[12,8]}
+      offset={[12, 8]}
       placement="bottom-end"
       interactive={true}
-      render={(attrss) => (
-        <div className={cx("menu-lish")} tabIndex="-1" {...attrss}>
-          <PopperWrapper className={cx("menu-poper")}>
-            {history.length > 1 && (
-              <Header
-                title="Language"
-                onBack={() => {
-                  setHistory((prev) => prev.slice(0, prev.length - 1));
-                }}
-              />
-            )}
-            {renderItems()}
-          </PopperWrapper>
-        </div>
-      )}
-      onHide={()=> setHistory(prev => prev.slice(0, 1))}
+      hideOnClick={hideOnClick}
+      render={renderResult}
+      onHide={handleResetToFristPage}
     >
       {children}
     </Tippy>
